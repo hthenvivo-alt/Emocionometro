@@ -96,7 +96,7 @@ export default function EmotionChart({ points = [], showNames = false }) {
             <div className="absolute w-full h-[2px] bg-white/20 top-1/2 -translate-y-1/2 rounded-full"></div>
             {/* Texto central */}
             <span className="text-white font-black tracking-[0.3em] text-sm md:text-xl z-10 bg-[#0f172a] px-6 py-1 rounded-full border border-white/10 drop-shadow-lg hidden sm:block">
-              SENSACIÓN
+              GRADOS
             </span>
           </div>
           
