@@ -7,7 +7,7 @@ export default function EmotionChart({ points = [], showNames = false }) {
   // X = Placer, Y = Energía
   
   return (
-    <div className="w-full max-w-5xl mx-auto flex flex-row items-stretch p-2 md:p-6 select-none aspect-[4/5] md:aspect-[21/9]">
+    <div className="w-full max-w-5xl mx-auto flex flex-row items-stretch p-2 md:p-6 select-none aspect-[4/5] md:aspect-[16/9]">
       
       {/* Y-Axis: Energía */}
       <div className="w-12 md:w-20 flex flex-col justify-between items-center py-8 relative mr-2 md:mr-4">
