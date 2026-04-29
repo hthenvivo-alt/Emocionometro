@@ -1,4 +1,45 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+function ChartPoint({ p, showNames, hoveredId, setHoveredId }) {
+  const [isNew, setIsNew] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsNew(false);
+    }, 3000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const offset = 16; 
+  const leftPos = `calc(${offset}px + ${(p.x / 10)} * (100% - ${offset * 2}px))`;
+  const topPos = `calc(${offset}px + ${(1 - p.y / 10)} * (100% - ${offset * 2}px))`;
+
+  const isHovered = hoveredId === (p.id || p.timestamp);
+  const showTooltip = showNames && p.nombre && (isHovered || isNew);
+
+  return (
+    <div 
+      className="absolute transform -translate-x-1/2 -translate-y-1/2 z-20 hover:z-50"
+      style={{ left: leftPos, top: topPos }}
+      onMouseEnter={() => setHoveredId(p.id || p.timestamp)}
+      onMouseLeave={() => setHoveredId(null)}
+      title={showNames ? p.nombre : undefined}
+    >
+      <div className="p-4 bg-transparent cursor-pointer flex items-center justify-center">
+        <div className={`w-3 h-3 md:w-4 md:h-4 bg-white rounded-full shadow-[0_0_12px_rgba(255,255,255,1)] border-2 border-slate-900 transition-all duration-200 ${(isHovered || isNew) ? 'scale-[1.8] bg-green-300' : ''}`}></div>
+      </div>
+      
+      {showTooltip && (
+        <div className={`absolute bottom-[80%] left-1/2 -translate-x-1/2 mb-1 pointer-events-none z-[9999] transition-opacity duration-500 ${isNew && !isHovered ? 'animate-in fade-in zoom-in duration-300' : ''}`}>
+          <div className="bg-slate-900 text-white text-xs md:text-sm font-bold py-1.5 px-3 rounded-lg whitespace-nowrap shadow-2xl border border-white/40 relative">
+            {p.nombre}
+            <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900"></div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function EmotionChart({ points = [], showNames = false }) {
   const [hoveredId, setHoveredId] = useState(null);
@@ -47,43 +88,15 @@ export default function EmotionChart({ points = [], showNames = false }) {
 
           {/* Capa de Puntos (Coincide exactamente con el contenedor, sin overflow-hidden) */}
           <div className="absolute inset-0">
-            {points.map((p) => {
-              // Calculamos la posición usando calc() para dejar un margen interno (offset)
-              // Así garantizamos que el radio del punto y el borde no dejen que visualmente "se caiga"
-              const offset = 16; // 16px de margen interno
-              const leftPos = `calc(${offset}px + ${(p.x / 10)} * (100% - ${offset * 2}px))`;
-              const topPos = `calc(${offset}px + ${(1 - p.y / 10)} * (100% - ${offset * 2}px))`;
-
-              const isHovered = hoveredId === (p.id || p.timestamp);
-
-              return (
-                <div 
-                  key={p.id || p.timestamp}
-                  className="absolute transform -translate-x-1/2 -translate-y-1/2 z-20 hover:z-50"
-                  style={{ left: leftPos, top: topPos }}
-                  onMouseEnter={() => setHoveredId(p.id || p.timestamp)}
-                  onMouseLeave={() => setHoveredId(null)}
-                  title={showNames ? p.nombre : undefined}
-                >
-                  {/* Área invisible más grande para hover */}
-                  <div className="p-4 bg-transparent cursor-pointer flex items-center justify-center">
-                    {/* Punto visual */}
-                    <div className={`w-3 h-3 md:w-4 md:h-4 bg-white rounded-full shadow-[0_0_12px_rgba(255,255,255,1)] border-2 border-slate-900 transition-all duration-200 ${isHovered ? 'scale-[1.8] bg-green-300' : ''}`}></div>
-                  </div>
-                  
-                  {/* Tooltip Nombre */}
-                  {showNames && p.nombre && isHovered && (
-                    <div className="absolute bottom-[80%] left-1/2 -translate-x-1/2 mb-1 pointer-events-none z-[9999]">
-                      <div className="bg-slate-900 text-white text-xs md:text-sm font-bold py-1.5 px-3 rounded-lg whitespace-nowrap shadow-2xl border border-white/40 relative">
-                        {p.nombre}
-                        {/* Triangulito */}
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-slate-900"></div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+            {points.map((p) => (
+              <ChartPoint 
+                key={p.id || p.timestamp} 
+                p={p} 
+                showNames={showNames} 
+                hoveredId={hoveredId} 
+                setHoveredId={setHoveredId} 
+              />
+            ))}
           </div>
         </div>
 
