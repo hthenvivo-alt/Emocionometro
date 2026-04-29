@@ -72,9 +72,22 @@ export default function AdminView() {
         </div>
       </div>
 
-      {/* Contenedor del Gráfico Centrado */}
-      <div className="flex-1 flex items-center justify-center">
-        <EmotionChart points={points} showNames={true} />
+      {/* Contenedor Principal (QR + Gráfico) */}
+      <div className="flex-1 flex flex-col xl:flex-row items-center justify-center gap-8 xl:gap-12 w-full max-w-[1400px] mx-auto">
+        
+        {/* QR Code */}
+        <div className="flex flex-col items-center justify-center w-64 md:w-80 shrink-0 bg-white p-6 rounded-[2rem] shadow-[0_0_40px_rgba(255,255,255,0.1)] border-4 border-slate-700/50">
+          <img src="/qr_emocionometro.jpg" alt="QR Code para participar" className="w-full h-auto rounded-xl" />
+          <p className="text-slate-900 font-extrabold text-center mt-6 text-xl tracking-tight leading-tight">
+            Escanea para<br/>participar
+          </p>
+        </div>
+
+        {/* Gráfico */}
+        <div className="flex-1 w-full flex items-center justify-center min-w-0">
+          <EmotionChart points={points} showNames={true} />
+        </div>
+        
       </div>
 
     </div>
