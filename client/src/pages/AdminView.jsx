@@ -53,7 +53,7 @@ export default function AdminView() {
       {/* Header Admin */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight">Emocionómetro <span className="text-blue-400">Admin</span></h1>
+          <h1 className="text-3xl font-extrabold tracking-tight">Emocionómetro <span className="text-blue-400">en Vivo</span></h1>
           <p className="text-slate-400">Total participantes: {points.length}</p>
         </div>
         <div className="flex gap-4">
